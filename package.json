@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "dev": "nodemon ./src/app.js",
+    "dev:debug": "nodemon --inspect ./src/app.js",
+    "test": "APP_ENV=test mocha ./src/app.test.js --timeout=10000 --exit",
+    "test:debug": "APP_ENV=test mocha --inspect ./src/app.test.js --timeout=10000 --exit",
+    "deploy": "bash heroku.sh deploy"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.0",
+    "nodemon": "^1.19.2",
+    "supertest": "^4.0.2"
+  }
+}
