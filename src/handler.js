@@ -11,7 +11,7 @@ const handler = async (req, res) => {
 
   // 0. Check if start range is given in original request
   {
-    const m = req.headers['range'] && req.headers['range'].match(/range: bytes=(\d*)-(\d*)/);
+    const m = req.headers['range'] && req.headers['range'].match(/bytes=(\d*)-(\d*)/);
     start = (m && m[1] && Number(m[1])) || 0;
     end = (m && m[2] && Number(m[2]));
   }
@@ -27,7 +27,7 @@ const handler = async (req, res) => {
     }
     const m = emptyResp.headers.get('content-range').match(/bytes 0-0\/(.*)/);
     total = m && m[1] && Number(m[1]);
-    end = end || (total - 1);
+    end = Number.isInteger(end) ? end : (total - 1);
     if (start > end) {
       return res.status(400).send('Invalid range selection');
     }
@@ -35,10 +35,10 @@ const handler = async (req, res) => {
 
   // 2. Write resposne header
   {
-    const respHeaders = Object.assign({
+    const respHeaders = Object.assign(emptyResp.headers.raw(), {
       'content-range': `bytes ${start}-${end}/${total}`,
       'content-length': (end - start) + 1
-    }, emptyResp.headers);
+    });
     res.writeHead(200, respHeaders);
   }
 
@@ -59,13 +59,13 @@ const handler = async (req, res) => {
 
   // 4. Sequentially request each splitted range and write to the response body
   const executions = ranges.map(([chunkStart, chunkEnd]) => async () => {
-    debugger;
     console.log('CHUNK REQUEST: ', [chunkStart, chunkEnd], url);
     const chunkResp = await fetch(url, { headers: { range: `bytes=${chunkStart}-${chunkEnd}` } });
     const buffer = await chunkResp.buffer();
     await lib.writeStream(res, buffer);
   });
   await lib.sequentialAll(executions);
+  res.end();
 };
 
 module.exports = handler;
