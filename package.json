@@ -2,8 +2,8 @@
   "scripts": {
     "dev": "nodemon ./src/app.js",
     "dev:debug": "nodemon --inspect ./src/app.js",
-    "test": "APP_ENV=test mocha ./src/app.test.js --timeout=10000 --exit",
-    "test:debug": "APP_ENV=test mocha --inspect ./src/app.test.js --timeout=10000 --exit",
+    "test": "APP_ENV=test mocha ./src/app.test.js --timeout=1000000 --exit",
+    "test:debug": "APP_ENV=test mocha --inspect ./src/app.test.js --timeout=1000000 --exit",
     "deploy": "bash heroku.sh deploy"
   },
   "dependencies": {

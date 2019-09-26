@@ -33,8 +33,17 @@ const handler = async (req, res) => {
     }
   }
 
-  // 2. Write resposne header
-  {
+  // 2. Write resposne header (if HEAD, then return)
+  if (req.method === 'HEAD') {
+    const respHeaders = Object.assign(emptyResp.headers.raw(), {
+      'content-length': total
+    });
+    delete respHeaders['content-range'];
+    res.writeHead(200, respHeaders);
+    res.end();
+    return
+  } else {
+
     const respHeaders = Object.assign(emptyResp.headers.raw(), {
       'content-range': `bytes ${start}-${end}/${total}`,
       'content-length': (end - start) + 1

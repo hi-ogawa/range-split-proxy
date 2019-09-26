@@ -30,4 +30,8 @@ case $1 in
   url)
     heroku apps:info --app="${HEROKU_APP_NAME}" -s 2>/dev/null | grep web_url | cut -d '=' -f 2
   ;;
+  logs)
+    shift
+    heroku logs --app="${HEROKU_APP_NAME}" "${@}"
+  ;;
 esac
