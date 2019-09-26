@@ -1,16 +1,17 @@
 Range Split Proxy
 
 - Workaround for slow doanlod problem in https://github.com/hi-ogawa/podcastify
+- But it breaks stream playback functionality.
 
 ```
 # Example
-$ URL="https://podcastify.hiogawa.now.sh/enclosure?videoUrl=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DIPS8jTWya8Y"
-$ PROXY_URL="http://localhost:7070/?url=$(echo $URL | jq -rR '@uri')"
-$ curl -L $URL > out1
-$ curl $PROXY_URL > out2
+URL="https://podcastify.hiogawa.now.sh/enclosure?videoUrl=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DIPS8jTWya8Y"
+PROXY_URL="http://localhost:7070/?url=$(echo $URL | jq -rR '@uri')"
+curl -L $URL > out1
+curl $PROXY_URL > out2
 
-$ PROXY_URL="https://range-split-proxy.herokuapp.com/?url=$(echo $URL | jq -rR '@uri')"
-$ curl $PROXY_URL > out2
+PROXY_URL="https://range-split-proxy.herokuapp.com/?url=$(echo $URL | jq -rR '@uri')"
+curl $PROXY_URL > out2
 ```
 
 
